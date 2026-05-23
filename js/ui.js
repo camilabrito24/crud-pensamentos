@@ -7,19 +7,25 @@ const ui = {
       document.getElementById("pensamento-conteudo").value = pensamento.conteudo;
       document.getElementById("pensamento-autoria").value = pensamento.autoria;
     },
-    async renderizarPensamentos(){
+    async renderizarPensamentos(pensamentosFiltrados = null){
         const listaPensamentos = document.getElementById('lista-pensamentos');
         const mensagemVazia = document.getElementById("mensagem-vazia");
         listaPensamentos.innerHTML = "";
 
         try{
-            const pensamentos = await api.buscarPensamentos();
-            pensamentos.forEach(ui.adicionarPensamentoNaLista)
-            if (pensamentos.length === 0) {
+            let pensamentosParaRenderizar;
+
+            if(pensamentosFiltrados){
+                pensamentosParaRenderizar = pensamentosFiltrados;
+            }else{
+                pensamentosParaRenderizar = await api.buscarPensamentos();
+            }
+
+            if (pensamentosParaRenderizar.length === 0) {
                 mensagemVazia.style.display = "block";
             } else {
                 mensagemVazia.style.display = "none";
-                pensamentos.forEach(ui.adicionarPensamentoNaLista)
+                pensamentosParaRenderizar.forEach(ui.adicionarPensamentoNaLista)
             }
         }catch{
             alert('Erro ao renderizar pensamentos');
@@ -70,8 +76,17 @@ const ui = {
         iconeExcluir.alt = "Excluir";
         botaoExcluir.appendChild(iconeExcluir);
 
+        const botaoFavorito = document.createElement("button");
+        botaoFavorito.classList.add("botao-favorito");
+
+        const iconeFavorito = document.createElement("img");
+        iconeFavorito.src = "./assets/imagens/icone-favorito_outline.png";
+        iconeFavorito.alt = "ícone de favorito";
+        botaoFavorito.appendChild(iconeFavorito);
+
         const icones = document.createElement("div");
         icones.classList.add("icones");
+        icones.appendChild(botaoFavorito);
         icones.appendChild(botaoEditar);
         icones.appendChild(botaoExcluir);
 
