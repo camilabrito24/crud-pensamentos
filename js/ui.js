@@ -80,9 +80,17 @@ const ui = {
         botaoFavorito.classList.add("botao-favorito");
 
         const iconeFavorito = document.createElement("img");
-        iconeFavorito.src = "./assets/imagens/icone-favorito_outline.png";
+        iconeFavorito.src = pensamento.favorito ? "./assets/imagens/icone-favorito.png" : "./assets/imagens/icone-favorito_outline.png";
         iconeFavorito.alt = "ícone de favorito";
         botaoFavorito.appendChild(iconeFavorito);
+        botaoFavorito.onclick = async () => {
+            try {
+                await api.atualizarFavorito(pensamento.id, !pensamento.favorito);
+                ui.renderizarPensamentos();
+            }catch (error){
+                alert("Erro ao atualizar pensamento.")
+            }
+        }
 
         const icones = document.createElement("div");
         icones.classList.add("icones");

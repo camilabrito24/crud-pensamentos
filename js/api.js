@@ -60,8 +60,9 @@ const api = {
         }
     },
     async atualizarFavorito(id, favorito){
+        console.log(id)
         try{
-            const response = await axios.patch(`${url_base}/pensamentos/${id}}`,{favorito});
+            const response = await axios.patch(`${url_base}/pensamentos/${id}`,{favorito});
             return response.data;
         } catch (error){
             alert("Erro ao atualizar favorito");
